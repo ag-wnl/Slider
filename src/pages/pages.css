@@ -38,7 +38,20 @@
 
 .table-row-left {
     display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.table-row-left-primary {
+    display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 15px;
+    gap: 5px;
+}
+
+.job-table-filter-bar-parent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }

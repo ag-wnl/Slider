@@ -3,7 +3,7 @@
     padding: 70px;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
     border-top: 1px solid #ff21c8;
 
     background: rgb(179, 37, 171);

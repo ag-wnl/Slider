@@ -1,4 +1,4 @@
-import { Text, Pagination, Card, Button, Loading, Grid } from '@geist-ui/core'
+import { Text, Pagination, Card, Button, Loading, Grid, Select, Drawer, Toggle } from '@geist-ui/core'
 import '../pages/pages.css'
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -7,23 +7,76 @@ import { useEffect, useState } from 'react';
 // API endpoints:
 // levels.fyi : https://www.levels.fyi/_next/data/durNS2QKC9YoAnXLOOr3N/jobs/location/india.json
 
+// https://logo.clearbit.com/${job}.com for any company logo
+
 type JobDataType = {
-    listings: string[];
+    position: string;
+    company: string;
+    companyLogo: string;
+    location: string;
+    date: string;
+    agoTime: string;
+    salary: string;
+    jobUrl: string;
 };
 
 function Home() {
-    const [jobListings, setJobListings] = useState<string[]>([]);
+    const [jobListings, setJobListings] = useState<JobDataType[]>([]);
+    const [drawerState, setDrawerState] = useState(false);
+    const [jobType, setJobType] = useState("internship");
+    const [remoteOnly, setRemoteOnly] = useState(false);
+    const [jobField, setJobField] = useState("software engineering");
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        fetch("http://localhost:5000/api")
+        fetch("http://localhost:5000/api/linkedin_jobs/")
             .then((res) => res.json())
-            .then((data: JobDataType) => {
-                setJobListings(data.listings);
+            .then((data: JobDataType[]) => {
+                setJobListings(data);
             })
             .catch((error) => {
                 console.error('Error fetching job listings:', error);
             });
     }, []);
+
+
+    let jobsPerPage : number = 10;
+    const totalPages = Math.ceil(jobListings.length / jobsPerPage);
+
+    const handlePageChange = (page : number) => {
+        setCurrentPage(page);
+    }
+
+    // Calculating which jobs to show right now:
+    const startIndex : number = (currentPage - 1) * jobsPerPage;
+    const endIndex : number = startIndex + jobsPerPage;
+
+    // Jobs to show in current page:
+    const currentJobsDisplay = jobListings.slice(startIndex, endIndex);
+
+    const jobApplyButtonClick = (jobApplyLink : string) => {
+        window.open(jobApplyLink);
+    };
+
+    const RemoteTogglehandler = (event : any) => {
+        setRemoteOnly(event.target.checked);
+    }
+
+    const handleFieldChange = (value: string | string[]) => {
+        if (typeof value === 'string') {
+            setJobField(value);
+        } else {
+            setJobField(value[0]);
+        }
+    };
+
+    const handleJobTypeChange = (value: string | string[]) => {
+        if (typeof value === 'string') {
+            setJobType(value);
+        } else {
+            setJobType(value[0]);
+        }
+    };
 
     return (
         <>
@@ -33,7 +86,54 @@ function Home() {
 
                     <Text b type="secondary">Your internship search condensed to a single page</Text>
 
-                    <Text h3 type='success'>Recent Openings</Text>
+                    <div className='job-table-filter-bar-parent'>
+                        <div><Text h3 type='success'>Recent Openings</Text></div>
+
+                        <div>
+                        <Button placeholder='' auto onClick={() => setDrawerState(true)}>Filters</Button>
+                        
+                        <Drawer width='400px' visible={drawerState} onClose={() => setDrawerState(false)} placement="right">
+                            <Drawer.Title><Text b>Filter Options</Text></Drawer.Title>
+                            <Drawer.Content>
+                                <div style={{display:"flex", flexDirection:"row", gap:"30px", alignItems:"center", justifyContent:"space-between"}}>
+                                    <Text>Job Type</Text>
+                                    <Select placeholder="Type"  
+                                    width='200px' 
+                                    value = {jobType}
+                                    onChange={handleJobTypeChange}>
+                                        <Select.Option value="internship">Internship</Select.Option>
+                                        <Select.Option value="full time">Full-Time</Select.Option>
+                                    </Select>
+                                </div>
+
+                                <div style={{display:"flex", flexDirection:"row", gap:"30px", alignItems:"center", justifyContent:"space-between"}}>
+                                    <Text>Work remotely</Text>
+                                    
+                                    <Toggle checked={remoteOnly} onChange={RemoteTogglehandler} />
+                                </div>
+
+                                <div style={{display:"flex", flexDirection:"row", gap:"30px", alignItems:"center", justifyContent:"space-between"}}>
+                                    <Text>Field</Text>
+                                    
+                                    <Select 
+                                    placeholder="Field" 
+                                    width='200px'
+                                    value = {jobField}
+                                    onChange={handleFieldChange}>
+                                        <Select.Option value="Software Engineering">Software Engineering</Select.Option>
+                                        <Select.Option value="Data Science">Data Science</Select.Option>
+                                        <Select.Option value="Machine Learning">Machine Learning</Select.Option>
+                                        <Select.Option value="Web Development">Web Development</Select.Option>
+                                        <Select.Option value="Marketing">Marketing</Select.Option>
+                                        <Select.Option value="Finance">Finance</Select.Option>
+                                        <Select.Option value="Human Resources">Human Resources</Select.Option>
+                                    </Select>
+                                </div>
+                            </Drawer.Content>
+                        </Drawer>
+
+                        </div>
+                    </div>
 
                     <div className='centered-table'>
                         
@@ -54,19 +154,30 @@ function Home() {
                                 </Grid>
                               </Grid.Container>
                             ) : (
-                                jobListings.map((job, index) => (
+                                currentJobsDisplay.map((job, index) => (
                                     <div className='openings-table-row' key={index}>
                                         <div className='table-row-left'>
-                                            <img width="30px" src={`https://logo.clearbit.com/${job}.com`} alt={`${job} Logo`} />
-                                            <Text font="20px" b type='success'>{job}</Text>
+                                            <div className='table-row-left-primary'> 
+                                                <img width="30px" src={`https://logo.clearbit.com/${job.company}.com`} alt={""} onError={(e) => {
+                                                    e.currentTarget.src = 'https://i.imgur.com/5mv5RX6.png'
+                                                }} />
+                                                <Text font="20px" b type='success'>{job.company}</Text>
+                                            </div>
+
+                                            <div style={{display:"flex", flexDirection:"row", gap:"10px", alignItems:"center"}}>
+                                                <Text font="12px" b type='secondary'>{job.position}</Text>
+                                                <Text font="10px" b type='secondary'>{job.agoTime}</Text>
+                                            </div>
+                                            
                                         </div>
-                                        <Button type="success" placeholder='apply'>Apply</Button>
+
+                                        <Button onClick={() => jobApplyButtonClick(job.jobUrl)} type="success" placeholder='apply'>Apply</Button>
                                     </div>
                                 ))
                             )}
                         </div>
                     
-                        <Pagination count={20} initialPage={1} style={{marginTop:"20px"}} />        
+                        <Pagination count={totalPages} initialPage={currentPage} onChange={handlePageChange} style={{marginTop:"20px"}} />        
                     </div>
                 </div>
             </div>
