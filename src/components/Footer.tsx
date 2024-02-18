@@ -11,10 +11,6 @@ function Footer() {
                     <Text h3><span style={{color:'#8a63d2'}}>^\</span> Slider</Text><Text font="12px" type="secondary">© 2024 Slider. All rights reserved.
                     </Text>
                 </div>
-                <div>
-                    Agnideep Ghosh
-                </div>
-                <div>Contact</div>
             </div>
         </>
     );

@@ -27,17 +27,27 @@ function Home() {
     const [remoteOnly, setRemoteOnly] = useState(false);
     const [jobField, setJobField] = useState("software engineering");
     const [currentPage, setCurrentPage] = useState(1);
+    const [dataLoading, setDataLoading] = useState(false);
 
     useEffect(() => {
-        fetch("http://localhost:5000/api/linkedin_jobs/")
+        setDataLoading(true);
+
+        let baseUrl : string = "http://localhost:5000/api/linkedin_jobs/";
+        baseUrl += `?jobtype=${jobType}`; 
+        baseUrl += `&remote=${remoteOnly}`; 
+        baseUrl += `&jobfield=${jobField}`; 
+
+        fetch(baseUrl)
             .then((res) => res.json())
             .then((data: JobDataType[]) => {
                 setJobListings(data);
+                setDataLoading(false);
             })
             .catch((error) => {
                 console.error('Error fetching job listings:', error);
+                setDataLoading(false);
             });
-    }, []);
+    }, [jobType, remoteOnly, jobField]);
 
 
     let jobsPerPage : number = 10;
@@ -84,7 +94,7 @@ function Home() {
                 <div className='centered-page-parent-box'>
                     <Header />
 
-                    <Text b type="secondary">Your internship search condensed to a single page</Text>
+                    <Text b type="secondary">Your internship/job search condensed to a single page. Explore all major recent openings</Text>
 
                     <div className='job-table-filter-bar-parent'>
                         <div><Text h3 type='success'>Recent Openings</Text></div>
@@ -138,7 +148,7 @@ function Home() {
                     <div className='centered-table'>
                         
                         <div className='openings-table-parent-box'>
-                            {jobListings.length === 0 ? (
+                            {(jobListings.length === 0 || dataLoading) ? (
                                 <Grid.Container gap={2.5}>
                                 <Grid xs={24}>
                                   <Loading type="success" />
@@ -170,7 +180,7 @@ function Home() {
                                             </div>
                                             
                                         </div>
-
+                                        
                                         <Button onClick={() => jobApplyButtonClick(job.jobUrl)} type="success" placeholder='apply'>Apply</Button>
                                     </div>
                                 ))
