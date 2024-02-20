@@ -1,24 +1,22 @@
-import { Text, Pagination, Card, Button, Loading, Grid, Select, Drawer, Toggle } from '@geist-ui/core'
+import { Text, Pagination, Button, Loading, Grid, Select, Drawer, Toggle } from '@geist-ui/core'
 import '../pages/pages.css'
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { useEffect, useState } from 'react';
-
-// API endpoints:
-// levels.fyi : https://www.levels.fyi/_next/data/durNS2QKC9YoAnXLOOr3N/jobs/location/india.json
 
 // https://logo.clearbit.com/${job}.com for any company logo
 
 type JobDataType = {
     position: string;
     company: string;
-    companyLogo: string;
-    location: string;
-    date: string;
-    agoTime: string;
-    salary: string;
+    companyLogo?: string;
+    location?: string;
+    date?: string;
+    agoTime?: string;
+    salary?: string;
     jobUrl: string;
 };
+
 
 function Home() {
     const [jobListings, setJobListings] = useState<JobDataType[]>([]);
@@ -32,12 +30,14 @@ function Home() {
     useEffect(() => {
         setDataLoading(true);
 
-        let baseUrl : string = "http://localhost:5000/api/linkedin_jobs/";
-        baseUrl += `?jobtype=${jobType}`; 
-        baseUrl += `&remote=${remoteOnly}`; 
-        baseUrl += `&jobfield=${jobField}`; 
+        // let baseUrl : string = "https://api-slider-jobs.onrender.com/api/linkedin_jobs";
+        let bigTechUrl : string = "https://api-slider-jobs.onrender.com/api/bigtech";
+        
+        // baseUrl += `?jobtype=${jobType}`; 
+        // baseUrl += `&remote=${remoteOnly}`; 
+        // baseUrl += `&jobfield=${jobField}`; 
 
-        fetch(baseUrl)
+        fetch(bigTechUrl)
             .then((res) => res.json())
             .then((data: JobDataType[]) => {
                 setJobListings(data);
@@ -94,7 +94,7 @@ function Home() {
                 <div className='centered-page-parent-box'>
                     <Header />
 
-                    <Text b type="secondary">Your internship/job search condensed to a single page. Explore all major recent openings</Text>
+                    <Text b type="secondary">Your internship/job search condensed to a single page. Explore all major recent openings without wasting time going through multiple sites</Text>
 
                     <div className='job-table-filter-bar-parent'>
                         <div><Text h3 type='success'>Recent Openings</Text></div>
@@ -139,6 +139,7 @@ function Home() {
                                         <Select.Option value="Human Resources">Human Resources</Select.Option>
                                     </Select>
                                 </div>
+
                             </Drawer.Content>
                         </Drawer>
 
@@ -171,11 +172,13 @@ function Home() {
                                                 <img width="30px" src={`https://logo.clearbit.com/${job.company}.com`} alt={""} onError={(e) => {
                                                     e.currentTarget.src = 'https://i.imgur.com/5mv5RX6.png'
                                                 }} />
-                                                <Text font="20px" b type='success'>{job.company}</Text>
+                                                <Text font="20px" b type='success'>{job.position}</Text>
                                             </div>
 
                                             <div style={{display:"flex", flexDirection:"row", gap:"10px", alignItems:"center"}}>
-                                                <Text font="12px" b type='secondary'>{job.position}</Text>
+                                                <Text font="12px" b type='secondary'>{job.company}  •</Text>
+                                                <Text font="12px" b type='secondary'>{job.location}</Text>
+                                                <Text font="12px" b type='secondary'>{job.date}</Text>
                                                 <Text font="10px" b type='secondary'>{job.agoTime}</Text>
                                             </div>
                                             
@@ -197,12 +200,3 @@ function Home() {
 }
 
 export default Home;
-
-
-{/* <div className='openings-table-row'>
-                                <div className='table-row-left'>
-                                    <img width="30px" src="https://logo.clearbit.com/meta.com" />
-                                    <Text font="20px" b type='success'>Software Engineering Intern</Text>
-                                </div>
-                                <Button type="success" placeholder='apply'>Apply</Button>
-                            </div> */}

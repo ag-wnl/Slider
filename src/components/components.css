@@ -1,11 +1,9 @@
 .footer{
-    margin-top: 40px;
+    margin-top: 60px;
     padding: 70px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    border-top: 1px solid #ff21c8;
-
     background: rgb(179, 37, 171);
     background: linear-gradient(90deg, rgba(223,208,255,1) 0%, rgba(198,176,253,1) 50%, rgb(172, 136, 255) 100%);
 }
