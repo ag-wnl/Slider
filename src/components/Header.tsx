@@ -1,6 +1,6 @@
 import { Text } from "@geist-ui/core";
 import '../components/components.css'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 function Header() {
