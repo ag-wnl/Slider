@@ -23,3 +23,23 @@
 .header-clickable-option:hover {
     color: #ff0080;
 }
+
+.header-right-section{
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+}
+
+.mobile-menu-icon {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .header-right-section {
+        display: none;
+    }
+
+    .mobile-menu-icon {
+        display: block;
+    }
+}

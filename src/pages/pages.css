@@ -62,4 +62,8 @@
         flex-direction: column; /* Stack items vertically on smaller screens */
         gap: 10px; /* Adjust the gap as needed */
     }
+
+    .centered-page-parent-box {
+        margin: 8px 20px 8px 20px;
+    }
 }

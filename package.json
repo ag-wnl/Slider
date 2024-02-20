@@ -1,7 +1,7 @@
 {
   "name": "website",
   "version": "0.1.0",
-  "proxy" : "https://localhost:5000",   
+  "proxy": "https://localhost:5000",
   "private": true,
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
@@ -9,6 +9,7 @@
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
     "@geist-ui/core": "^2.3.8",
+    "@geist-ui/icons": "^1.0.2",
     "@mui/material": "^5.15.10",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -19,6 +20,7 @@
     "@types/react-dom": "^18.2.19",
     "framer-motion": "^11.0.5",
     "react": "^18.2.0",
+    "react-burger-menu": "^3.0.9",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.1",
     "react-scripts": "5.0.1",

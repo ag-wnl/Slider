@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { useEffect, useState } from 'react';
 
+
 // https://logo.clearbit.com/${job}.com for any company logo
 
 type JobDataType = {
@@ -32,6 +33,7 @@ function Home() {
 
         // let baseUrl : string = "https://api-slider-jobs.onrender.com/api/linkedin_jobs";
         let bigTechUrl : string = "https://api-slider-jobs.onrender.com/api/bigtech";
+        // let bigTechUrl : string = "localhost:5000/api/bigtech";
         
         // baseUrl += `?jobtype=${jobType}`; 
         // baseUrl += `&remote=${remoteOnly}`; 
@@ -93,7 +95,7 @@ function Home() {
             <div>
                 <div className='centered-page-parent-box'>
                     <Header />
-
+                    
                     <Text b type="secondary">Your internship/job search condensed to a single page. Explore all major recent openings without wasting time going through multiple sites</Text>
 
                     <div className='job-table-filter-bar-parent'>
@@ -138,6 +140,14 @@ function Home() {
                                         <Select.Option value="Finance">Finance</Select.Option>
                                         <Select.Option value="Human Resources">Human Resources</Select.Option>
                                     </Select>
+                                </div>
+
+                                <div>
+                                    <Button placeholder='' 
+                                    auto 
+                                    style={{marginTop:"10px"}}
+                                    onClick={() => setDrawerState(false)}
+                                    scale={1/3}>Close</Button>
                                 </div>
 
                             </Drawer.Content>
