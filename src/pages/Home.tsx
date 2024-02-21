@@ -27,29 +27,57 @@ function Home() {
     const [jobField, setJobField] = useState("software engineering");
     const [currentPage, setCurrentPage] = useState(1);
     const [dataLoading, setDataLoading] = useState(false);
+    const [onlyBigTech, setOnlyBigTech] = useState(false);
 
     useEffect(() => {
         setDataLoading(true);
 
         // let baseUrl : string = "https://api-slider-jobs.onrender.com/api/linkedin_jobs";
-        let bigTechUrl : string = "https://api-slider-jobs.onrender.com/api/bigtech";
-        // let bigTechUrl : string = "localhost:5000/api/bigtech";
+        // let bigTechUrl : string = "https://api-slider-jobs.onrender.com/api/bigtech";
+        let bigTechUrl : string = "http://localhost:5000/api/bigtech/";
+        let baseUrl : string = "http://localhost:5000/api/linkedin_jobs";
         
-        // baseUrl += `?jobtype=${jobType}`; 
-        // baseUrl += `&remote=${remoteOnly}`; 
-        // baseUrl += `&jobfield=${jobField}`; 
-
-        fetch(bigTechUrl)
-            .then((res) => res.json())
-            .then((data: JobDataType[]) => {
+        if(onlyBigTech) {
+            fetch(bigTechUrl)
+            .then((res => res.json()))
+            .then((data : JobDataType[]) => {
                 setJobListings(data);
                 setDataLoading(false);
-            })
-            .catch((error) => {
-                console.error('Error fetching job listings:', error);
+            }).catch((err) => {
+                console.log('Error in fetching big tech jobs : ', err);
                 setDataLoading(false);
             });
-    }, [jobType, remoteOnly, jobField]);
+        } else {
+            baseUrl += `?jobtype=${jobType}`; 
+            baseUrl += `&remote=${remoteOnly}`; 
+            baseUrl += `&jobfield=${jobField}`; 
+            
+            const linkedinPromise = fetch(baseUrl)
+            .then((res) => res.json())
+            .catch((err => {
+                console.log('Error in fetching from linkedin postings: ', err);
+                return [];
+            }))
+
+            const bigTechPromise = fetch(bigTechUrl)
+            .then((res) => res.json())
+            .catch((err => {
+                console.log('Error in fetching from bigTech postings: ', err);
+                return [];
+            }))
+
+            Promise.all([linkedinPromise, bigTechPromise])
+            .then(([linkedinData, bigTechData]) => {
+                const allListingData = linkedinData.concat(bigTechData);
+                setJobListings(allListingData);
+                setDataLoading(false);
+            }).catch((err) => {
+                console.log('Error in combined linkedin and big-tech fetch: ', err);
+                setDataLoading(false);
+            })
+        }
+
+    }, [onlyBigTech, jobType, remoteOnly, jobField]);
 
 
     let jobsPerPage : number = 10;
@@ -81,6 +109,10 @@ function Home() {
             setJobField(value[0]);
         }
     };
+
+    const toggleBigTech = (event : any) => {
+        setOnlyBigTech(event.target.checked);
+    }
 
     const handleJobTypeChange = (value: string | string[]) => {
         if (typeof value === 'string') {
@@ -119,12 +151,18 @@ function Home() {
                                 </div>
 
                                 <div style={{display:"flex", flexDirection:"row", gap:"30px", alignItems:"center", justifyContent:"space-between"}}>
+                                    <Text>Big-Tech Only</Text>
+                                    <Toggle checked={onlyBigTech} onChange={toggleBigTech} />
+                                </div>
+
+                                <div style={{display:"flex", flexDirection:"row", gap:"30px", alignItems:"center", justifyContent:"space-between"}}>
                                     <Text>Work remotely</Text>
                                     
                                     <Toggle checked={remoteOnly} onChange={RemoteTogglehandler} />
                                 </div>
 
-                                <div style={{display:"flex", flexDirection:"row", gap:"30px", alignItems:"center", justifyContent:"space-between"}}>
+                                {!onlyBigTech && (
+                                    <div style={{display:"flex", flexDirection:"row", gap:"30px", alignItems:"center", justifyContent:"space-between"}}>
                                     <Text>Field</Text>
                                     
                                     <Select 
@@ -140,8 +178,10 @@ function Home() {
                                         <Select.Option value="Finance">Finance</Select.Option>
                                         <Select.Option value="Human Resources">Human Resources</Select.Option>
                                     </Select>
-                                </div>
-
+                                    </div>
+                                )}
+                                
+        
                                 <div>
                                     <Button placeholder='' 
                                     auto 
