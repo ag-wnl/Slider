@@ -32,10 +32,10 @@ function Home() {
     useEffect(() => {
         setDataLoading(true);
 
-        // let baseUrl : string = "https://api-slider-jobs.onrender.com/api/linkedin_jobs";
-        // let bigTechUrl : string = "https://api-slider-jobs.onrender.com/api/bigtech";
-        let bigTechUrl : string = "http://localhost:5000/api/bigtech/";
-        let baseUrl : string = "http://localhost:5000/api/linkedin_jobs";
+        let baseUrl : string = "https://api-slider-jobs.onrender.com/api/linkedin_jobs";
+        let bigTechUrl : string = "https://api-slider-jobs.onrender.com/api/bigtech";
+        // let bigTechUrl : string = "http://localhost:5000/api/bigtech/";
+        // let baseUrl : string = "http://localhost:5000/api/linkedin_jobs";
         
         if(onlyBigTech) {
             fetch(bigTechUrl)
