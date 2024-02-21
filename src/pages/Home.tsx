@@ -147,7 +147,7 @@ function Home() {
                                     auto 
                                     style={{marginTop:"10px"}}
                                     onClick={() => setDrawerState(false)}
-                                    scale={1/3}>Close</Button>
+                                    scale={2/3}>Close</Button>
                                 </div>
 
                             </Drawer.Content>
