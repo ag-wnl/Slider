@@ -35,9 +35,11 @@ function Header() {
                 
             </div>
             {isMenuOpen && (
-                        <div style={{display:"flex", flexDirection:"column", gap:"10px", alignItems:"center", justifyItems:"center", zIndex:"10"}}>
-                            <div>About</div>
-                            <div>Resume Scanner</div>
+                        <div className="mobile-navbar-dropdown">
+                            <div><Text h4 b type="success">About</Text></div>
+                            <div>
+                                <Text h4 b type="success">Resume Scanner <sup style={{color:"red"}}>soon</sup></Text>
+                            </div>
                         </div>
                     )}
         </>

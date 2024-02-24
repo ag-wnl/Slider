@@ -28,6 +28,7 @@ function Home() {
     const [currentPage, setCurrentPage] = useState(1);
     const [dataLoading, setDataLoading] = useState(false);
     const [onlyBigTech, setOnlyBigTech] = useState(false);
+    // const [currentListings, setCurrentListings] = useState<JobDataType[]>([]);
 
     useEffect(() => {
         setDataLoading(true);
@@ -228,7 +229,6 @@ function Home() {
                                             <div style={{display:"flex", flexDirection:"row", gap:"10px", alignItems:"center"}}>
                                                 <Text font="12px" b type='secondary'>{job.company}  •</Text>
                                                 <Text font="12px" b type='secondary'>{job.location}</Text>
-                                                <Text font="12px" b type='secondary'>{job.date}</Text>
                                                 <Text font="10px" b type='secondary'>{job.agoTime}</Text>
                                             </div>
                                             

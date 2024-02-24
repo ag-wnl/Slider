@@ -57,10 +57,19 @@
     align-items: center;
 }
 
+.mobile-navbar-dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
 @media screen and (max-width: 768px) {
     .openings-table-row {
         flex-direction: column; /* Stack items vertically on smaller screens */
         gap: 10px; /* Adjust the gap as needed */
+        align-items: flex-start;
     }
 
     .centered-page-parent-box {
