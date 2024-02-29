@@ -36,6 +36,23 @@
 .openings-table-row:hover {
     border-color: #99a9ff;
 }
+.search-bar-parent {
+    padding: 4px 10px 4px 10px;
+    width: 300px;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    vertical-align: middle;
+    border: 1px solid rgb(219, 219, 219);
+    border-radius: 6px;
+    gap: 10px;
+}
+
+.search-bar{
+    border: none;
+    align-items: center;
+    font-size: 14px;
+}
 
 .table-row-left {
     display: flex;
@@ -55,6 +72,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    gap: 20px;
 }
 
 .mobile-navbar-dropdown {
@@ -74,5 +92,13 @@
 
     .centered-page-parent-box {
         margin: 8px 20px 8px 20px;
+    }
+
+    .search-bar-parent {
+        width: 200px;
+    }
+    
+    .recent-openings-text {
+        font-size: 20px;
     }
 }

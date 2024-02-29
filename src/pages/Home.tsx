@@ -3,9 +3,8 @@ import '../pages/pages.css'
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { useEffect, useState } from 'react';
+import { Search } from '@geist-ui/icons'
 
-
-// https://logo.clearbit.com/${job}.com for any company logo
 
 type JobDataType = {
     position: string;
@@ -21,18 +20,19 @@ type JobDataType = {
 
 function Home() {
     const [jobListings, setJobListings] = useState<JobDataType[]>([]);
+    const [searchJobListings, setSearchJobListings] = useState<JobDataType[]>([]);
     const [drawerState, setDrawerState] = useState(false);
     const [jobType, setJobType] = useState("internship");
     const [remoteOnly, setRemoteOnly] = useState(false);
     const [jobField, setJobField] = useState("software engineering");
+    const [searchQuery, setSearchQuery] = useState<string>("");
     const [currentPage, setCurrentPage] = useState(1);
     const [dataLoading, setDataLoading] = useState(false);
     const [onlyBigTech, setOnlyBigTech] = useState(false);
-    // const [currentListings, setCurrentListings] = useState<JobDataType[]>([]);
 
     useEffect(() => {
         setDataLoading(true);
-
+        
         let baseUrl : string = "https://api-slider-jobs.onrender.com/api/linkedin_jobs";
         let bigTechUrl : string = "https://api-slider-jobs.onrender.com/api/bigtech";
         // let bigTechUrl : string = "http://localhost:5000/api/bigtech/";
@@ -77,23 +77,19 @@ function Home() {
                 setDataLoading(false);
             })
         }
-
     }, [onlyBigTech, jobType, remoteOnly, jobField]);
 
-
     let jobsPerPage : number = 10;
-    const totalPages = Math.ceil(jobListings.length / jobsPerPage);
+    const totalPages = Math.ceil((searchQuery === "" ? jobListings.length : searchJobListings.length) / jobsPerPage);
 
     const handlePageChange = (page : number) => {
         setCurrentPage(page);
     }
 
-    // Calculating which jobs to show right now:
     const startIndex : number = (currentPage - 1) * jobsPerPage;
     const endIndex : number = startIndex + jobsPerPage;
 
-    // Jobs to show in current page:
-    const currentJobsDisplay = jobListings.slice(startIndex, endIndex);
+    const currentJobsDisplay = (searchQuery === "" ? jobListings : searchJobListings).slice(startIndex, endIndex);
 
     const jobApplyButtonClick = (jobApplyLink : string) => {
         window.open(jobApplyLink);
@@ -123,6 +119,26 @@ function Home() {
         }
     };
 
+    const handleSearch = (event : React.ChangeEvent<HTMLInputElement>) => {
+        setDataLoading(true)
+
+        const value = event.currentTarget.value;
+        setSearchQuery(value);
+
+        const filteredListings = jobListings.filter(listing => 
+            listing.position.toLowerCase().includes(value.toLowerCase()) 
+            || 
+            (listing.location && listing.location.toLowerCase().includes(value.toLowerCase())) 
+            || 
+            listing.company.toLowerCase().includes(value.toLowerCase())
+        ); 
+
+        setSearchJobListings(filteredListings);
+        
+        setCurrentPage(1); // Reset current page when search query changes
+        setDataLoading(false)
+    }
+
     return (
         <>
             <div>
@@ -130,9 +146,19 @@ function Home() {
                     <Header />
                     
                     <Text b type="secondary">Your internship/job search condensed to a single page. Explore all major recent openings without wasting time going through multiple sites</Text>
-
+                    
                     <div className='job-table-filter-bar-parent'>
-                        <div><Text h3 type='success'>Recent Openings</Text></div>
+                        <div><Text h3 className='recent-openings-text' type='success'>Recent Openings</Text></div>
+
+                        <div style={{display:"flex", justifyContent:"center"}}>
+                            <div className='search-bar-parent'>
+                                <Search size={18} />
+                                <input className='search-bar' 
+                                type = "text"
+                                onChange={handleSearch} 
+                                placeholder='Search'></input>
+                            </div>
+                        </div>
 
                         <div>
                         <Button placeholder='' auto onClick={() => setDrawerState(true)}>Filters</Button>
