@@ -28,15 +28,16 @@ function Home() {
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [currentPage, setCurrentPage] = useState(1);
     const [dataLoading, setDataLoading] = useState(false);
-    const [onlyBigTech, setOnlyBigTech] = useState(false);
+    const [onlyBigTech, setOnlyBigTech] = useState(true);
 
     useEffect(() => {
         setDataLoading(true);
         
-        let baseUrl : string = "https://api-slider-jobs.onrender.com/api/linkedin_jobs";
+        let remoteUrl : string = "https://api-slider-jobs.onrender.com/api/remote";
         let bigTechUrl : string = "https://api-slider-jobs.onrender.com/api/bigtech";
         // let bigTechUrl : string = "http://localhost:5000/api/bigtech/";
-        // let baseUrl : string = "http://localhost:5000/api/linkedin_jobs";
+        // let remoteUrl : string = "http://localhost:5000/api/remote/";
+        // Currently remote represents remote jobs and YC backed startups (prominant startups or big tech remote)
         
         if(onlyBigTech) {
             fetch(bigTechUrl)
@@ -45,18 +46,26 @@ function Home() {
                 setJobListings(data);
                 setDataLoading(false);
             }).catch((err) => {
-                console.log('Error in fetching big tech jobs : ', err);
+                console.log('Error in fetching from big tech jobs endpoint : ', err);
                 setDataLoading(false);
             });
-        } else {
-            baseUrl += `?jobtype=${jobType}`; 
-            baseUrl += `&remote=${remoteOnly}`; 
-            baseUrl += `&jobfield=${jobField}`; 
-            
-            const linkedinPromise = fetch(baseUrl)
+        }
+        else if(remoteOnly) {
+            fetch(remoteUrl)
+            .then((res => res.json()))
+            .then((data : JobDataType[]) => {
+                setJobListings(data);
+                setDataLoading(false);
+            }).catch(err => {
+                console.log("Error in fetching remote openingscendpoint : ", err);
+                setDataLoading(false);
+            })
+        }
+        else { 
+            const remotePromise = fetch(remoteUrl)
             .then((res) => res.json())
             .catch((err => {
-                console.log('Error in fetching from linkedin postings: ', err);
+                console.log('Error in fetching from remote postings endpoint : ', err);
                 return [];
             }))
 
@@ -67,17 +76,17 @@ function Home() {
                 return [];
             }))
 
-            Promise.all([linkedinPromise, bigTechPromise])
-            .then(([linkedinData, bigTechData]) => {
-                const allListingData = linkedinData.concat(bigTechData);
+            Promise.all([remotePromise, bigTechPromise])
+            .then(([remoteData, bigTechData]) => {
+                const allListingData = remoteData.concat(bigTechData);
                 setJobListings(allListingData);
                 setDataLoading(false);
             }).catch((err) => {
-                console.log('Error in combined linkedin and big-tech fetch: ', err);
+                console.log('Error in combined remote and big-tech fetch: ', err);
                 setDataLoading(false);
             })
         }
-    }, [onlyBigTech, jobType, remoteOnly, jobField]);
+    }, [onlyBigTech, remoteOnly]);
 
     let jobsPerPage : number = 10;
     const totalPages = Math.ceil((searchQuery === "" ? jobListings.length : searchJobListings.length) / jobsPerPage);
