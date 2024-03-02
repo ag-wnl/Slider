@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom/client';
+// import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './pages/Home';
@@ -12,22 +12,41 @@ import About from './pages/About';
 
 
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+import { hydrate, render } from "react-dom";
 
-root.render(
-  <GeistProvider themeType='light'>
-    <CssBaseline /> 
-    <BrowserRouter>
-        <Routes>
-          <Route index element={<Home />} />
-          <Route path="/about" element={<About />} />
-        </Routes>
-    </BrowserRouter>
-  </GeistProvider>
+const APP = (<GeistProvider themeType='light'>
+<CssBaseline /> 
+<BrowserRouter>
+    <Routes>
+      <Route index element={<Home />} />
+      <Route path="/about" element={<About />} />
+    </Routes>
+</BrowserRouter>
+</GeistProvider>);
 
-);
+const rootElement = document.getElementById("root")!;
+if (rootElement.hasChildNodes()) {
+  hydrate(APP, rootElement);
+} else {
+  render(APP, rootElement);
+}
+
+// const root = ReactDOM.createRoot(
+//   document.getElementById('root') as HTMLElement
+// );
+
+// root.render(
+//   <GeistProvider themeType='light'>
+//     <CssBaseline /> 
+//     <BrowserRouter>
+//         <Routes>
+//           <Route index element={<Home />} />
+//           <Route path="/about" element={<About />} />
+//         </Routes>
+//     </BrowserRouter>
+//   </GeistProvider>
+
+// );
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
