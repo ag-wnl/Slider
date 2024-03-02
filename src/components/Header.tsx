@@ -16,7 +16,7 @@ function Header() {
     return(
         <>
             <div className="header">
-                <div    >
+                <div>
                     <Link to="/" style={{color:"black"}}>
                         <Text h1 style={{cursor:"pointer"}}><span style={{color:'#ff0080'}}>^\</span> Slider</Text>
                     </Link>  
@@ -29,14 +29,22 @@ function Header() {
                 </div>
 
                 <div className="header-right-section">
-                    <Text font="18px" b className="header-clickable-option">About</Text>
+                    <div>
+                        <Link to="/about" style={{color:"black"}}>
+                            <Text font="18px" b className="header-clickable-option">About</Text>
+                        </Link>
+                    </div>
                     <Text font="18px" b className="header-clickable-option">Resume Scanner</Text>
                 </div>
                 
             </div>
             {isMenuOpen && (
                         <div className="mobile-navbar-dropdown">
-                            <div><Text h4 b type="success">About</Text></div>
+                            <div>
+                            <Link to="/about">
+                                <Text h4 b type="success">About</Text>
+                            </Link>
+                            </div>
                             <div>
                                 <Text h4 b type="success">Resume Scanner <sup style={{color:"red"}}>soon</sup></Text>
                             </div>
