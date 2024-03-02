@@ -34,7 +34,6 @@ function Header() {
                             <Text font="18px" b className="header-clickable-option">About</Text>
                         </Link>
                     </div>
-                    <Text font="18px" b className="header-clickable-option">Resume Scanner</Text>
                 </div>
                 
             </div>

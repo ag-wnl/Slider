@@ -24,7 +24,6 @@ function Home() {
     const [drawerState, setDrawerState] = useState(false);
     const [jobType, setJobType] = useState("internship");
     const [remoteOnly, setRemoteOnly] = useState(false);
-    const [jobField, setJobField] = useState("software engineering");
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [currentPage, setCurrentPage] = useState(1);
     const [dataLoading, setDataLoading] = useState(false);
@@ -108,14 +107,6 @@ function Home() {
         setRemoteOnly(event.target.checked);
     }
 
-    const handleFieldChange = (value: string | string[]) => {
-        if (typeof value === 'string') {
-            setJobField(value);
-        } else {
-            setJobField(value[0]);
-        }
-    };
-
     const toggleBigTech = (event : any) => {
         setOnlyBigTech(event.target.checked);
     }
@@ -196,27 +187,6 @@ function Home() {
                                     
                                     <Toggle checked={remoteOnly} onChange={RemoteTogglehandler} />
                                 </div>
-
-                                {!onlyBigTech && (
-                                    <div style={{display:"flex", flexDirection:"row", gap:"30px", alignItems:"center", justifyContent:"space-between"}}>
-                                    <Text>Field</Text>
-                                    
-                                    <Select 
-                                    placeholder="Field" 
-                                    width='200px'
-                                    value = {jobField}
-                                    onChange={handleFieldChange}>
-                                        <Select.Option value="Software Engineering">Software Engineering</Select.Option>
-                                        <Select.Option value="Data Science">Data Science</Select.Option>
-                                        <Select.Option value="Machine Learning">Machine Learning</Select.Option>
-                                        <Select.Option value="Web Development">Web Development</Select.Option>
-                                        <Select.Option value="Marketing">Marketing</Select.Option>
-                                        <Select.Option value="Finance">Finance</Select.Option>
-                                        <Select.Option value="Human Resources">Human Resources</Select.Option>
-                                    </Select>
-                                    </div>
-                                )}
-                                
         
                                 <div>
                                     <Button placeholder='' 
