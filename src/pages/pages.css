@@ -1,9 +1,11 @@
+@import url(https://db.onlinewebfonts.com/c/961a181da27e7cbc072ec2fb5bbfe2a9?family=Circular+Std+Bold);
+
 .centered-page-parent-box {
     margin: 20px 50px 20px 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 50px;
+    gap: 10px;
 }
 
 .centered-table {
@@ -36,6 +38,24 @@
 .openings-table-row:hover {
     border-color: #99a9ff;
 }
+
+.blue-button {
+    font-family: "Circular Std Bold";
+    background-color: #0070F3;
+    width: 90px;
+    border: none;
+    text-decoration: none;
+    color: white;
+    padding: 16px 32px 16px 32px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+}
+
+.blue-button:hover {
+    background-color: #0067dd;
+}
+
 .search-bar-parent {
     padding: 4px 10px 4px 10px;
     width: 300px;
@@ -73,6 +93,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 20px;
+    margin-top: 50px;
 }
 
 .mobile-navbar-dropdown {
@@ -92,6 +113,12 @@
 
     .centered-page-parent-box {
         margin: 8px 20px 8px 20px;
+    }
+
+    .banner-parent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .search-bar-parent {

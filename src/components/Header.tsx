@@ -18,7 +18,7 @@ function Header() {
             <div className="header">
                 <div>
                     <Link to="/" style={{color:"black"}}>
-                        <Text h1 style={{cursor:"pointer"}}><span style={{color:'#ff0080'}}>^\</span> Slider</Text>
+                        <Text h1 font="32px" style={{cursor:"pointer"}}><span style={{color:'#ff0080'}}>^\</span> Slider</Text>
                     </Link>  
                 </div>
 
@@ -30,7 +30,7 @@ function Header() {
 
                 <div className="header-right-section">
                     <div>
-                        <Link to="/about" style={{color:"black"}}>
+                        <Link to="/about" style={{color:"grey"}}>
                             <Text font="18px" b className="header-clickable-option">About</Text>
                         </Link>
                     </div>

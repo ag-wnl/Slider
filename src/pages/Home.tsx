@@ -4,7 +4,10 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { useEffect, useState } from 'react';
 import { Search } from '@geist-ui/icons'
-
+import desktopBanner from '../imgs/desktop-banner.png'
+import mobileBanner from '../imgs/mobile-banner.png'
+import companyBanner from '../imgs/company-banner.png'
+// mockup graphics : https://appetize.io/demo?device=iphone14pro&osVersion=17.2&record=true
 
 type JobDataType = {
     position: string;
@@ -15,6 +18,7 @@ type JobDataType = {
     agoTime?: string;
     salary?: string;
     jobUrl: string;
+    internship?: boolean
 };
 
 
@@ -28,6 +32,20 @@ function Home() {
     const [currentPage, setCurrentPage] = useState(1);
     const [dataLoading, setDataLoading] = useState(false);
     const [onlyBigTech, setOnlyBigTech] = useState(true);
+    const[isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        }
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        }
+    }, []);
 
     useEffect(() => {
         setDataLoading(true);
@@ -38,7 +56,7 @@ function Home() {
         // let remoteUrl : string = "http://localhost:5000/api/remote/";
         // Currently remote represents remote jobs and YC backed startups (prominant startups or big tech remote)
         
-        if(onlyBigTech) {
+        if(onlyBigTech && !remoteOnly) {
             fetch(bigTechUrl)
             .then((res => res.json()))
             .then((data : JobDataType[]) => {
@@ -49,7 +67,7 @@ function Home() {
                 setDataLoading(false);
             });
         }
-        else if(remoteOnly) {
+        else if(remoteOnly && !onlyBigTech) {
             fetch(remoteUrl)
             .then((res => res.json()))
             .then((data : JobDataType[]) => {
@@ -144,9 +162,29 @@ function Home() {
             <div>
                 <div className='centered-page-parent-box'>
                     <Header />
-                    
-                    <Text b type="secondary">Your internship/job search condensed to a single page. Explore all major recent openings without wasting time going through multiple sites</Text>
-                    
+
+                    <div className='banner-parent'>
+                        <div style={{position:'relative'}} >
+                            <img src={isMobile ? mobileBanner : desktopBanner} alt='Desktop-banner' />
+                            {!isMobile && 
+                            <button 
+                            style={{position:'absolute', top:'70%', left:'10%', zIndex:'2'}}
+                            className='blue-button'>Get Started</button>
+                            }
+                        </div>
+
+                        {isMobile && 
+                            <button 
+                            
+                            className='blue-button'>Get Started</button>
+                        }
+                    </div>
+
+                    <div style={{display:'flex', flexDirection:'column', alignItems:'center', marginTop:'80px'}}>
+                        <Text h3 b type='secondary'>Discover openings at big tech companies</Text>
+                        <img src={companyBanner} height={'auto'} alt = 'companies' />
+                    </div>
+                            
                     <div className='job-table-filter-bar-parent'>
                         <div><Text h3 className='recent-openings-text' type='success'>Recent Openings</Text></div>
 
