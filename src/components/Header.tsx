@@ -30,6 +30,12 @@ function Header() {
 
                 <div className="header-right-section">
                     <div>
+                        <Link to="/explore" style={{color:"grey"}}>
+                            <Text font="18px" b className="header-clickable-option">Explore</Text>
+                        </Link>
+                    </div>
+
+                    <div>
                         <Link to="/about" style={{color:"grey"}}>
                             <Text font="18px" b className="header-clickable-option">About</Text>
                         </Link>

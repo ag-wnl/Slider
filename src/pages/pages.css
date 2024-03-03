@@ -15,6 +15,13 @@
     align-items: center;
 }
 
+.banner-below-main-parent {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    margin-top: 80px;
+}
+
 .openings-table-parent-box {
     display: flex;
     flex-direction: column;
@@ -123,6 +130,13 @@
 
     .search-bar-parent {
         width: 200px;   
+    }
+
+    .banner-below-main-parent {
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+        margin-top: 80px;
     }
     
     .recent-openings-text {

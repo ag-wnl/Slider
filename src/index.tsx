@@ -9,6 +9,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import About from './pages/About';
+import Explore from './pages/Explore';
 
 
 
@@ -42,6 +43,7 @@ root.render(
         <Routes>
           <Route index element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/explore" element={<Explore />} />
         </Routes>
     </BrowserRouter>
   </GeistProvider>
