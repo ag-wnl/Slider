@@ -56,7 +56,7 @@ function Home() {
                     </div>
 
                     <div style={{display:'flex', flexDirection:'column', alignItems:'center', marginTop:'80px'}}>
-                        <Text h3 b type='secondary'>Discover openings at big tech companies</Text>
+                        <span className='banner-text-heading'>Discover openings at big tech companies</span>
                         <img src={companyBanner} height={'auto'} alt = 'companies' />
                     </div>
 
@@ -70,8 +70,7 @@ function Home() {
                                 </Text>
 
                                 <Text p b type='secondary'>
-                                    To let you have more time preparing for the role, we try to make it as easy as possible
-                                    to apply at positions you are looking for while spending as less time as possible.
+                                    To let you have more time preparing for the role, we try to make it as easy as possible.
                                 </Text>
                             </div>             
                         </div>

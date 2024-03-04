@@ -25,15 +25,14 @@ function Explore()  {
 
     const [jobListings, setJobListings] = useState<JobDataType[]>([]);
     const [searchJobListings, setSearchJobListings] = useState<JobDataType[]>([]);
+    // const [internListings, setInternListings] = useState<JobDataType[]>([]);
     const [drawerState, setDrawerState] = useState(false);
-    const [jobType, setJobType] = useState("internship");
+    const [jobType, setJobType] = useState('internship');
     const [remoteOnly, setRemoteOnly] = useState(false);
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [currentPage, setCurrentPage] = useState(1);
     const [dataLoading, setDataLoading] = useState(false);
     const [onlyBigTech, setOnlyBigTech] = useState(true);
-
-    
 
     useEffect(() => {
         setDataLoading(true);
@@ -48,7 +47,13 @@ function Explore()  {
             fetch(bigTechUrl)
             .then((res => res.json()))
             .then((data : JobDataType[]) => {
-                setJobListings(data);
+                
+                const internships = data.filter(job => job.internship)
+                if(jobType === 'internship') {
+                    setJobListings(internships)
+                } else {
+                    setJobListings(data);
+                }
                 setDataLoading(false);
             }).catch((err) => {
                 console.log('Error in fetching from big tech jobs endpoint : ', err);
@@ -59,14 +64,22 @@ function Explore()  {
             fetch(remoteUrl)
             .then((res => res.json()))
             .then((data : JobDataType[]) => {
-                setJobListings(data);
+
+                const internships = data.filter(job => job.internship)
+                if(jobType === 'internship') {
+                    setJobListings(internships)
+                } else {
+                    setJobListings(data);
+                }
+    
                 setDataLoading(false);
+            
             }).catch(err => {
                 console.log("Error in fetching remote openingscendpoint : ", err);
                 setDataLoading(false);
             })
         }
-        else { 
+        else if ((remoteOnly && onlyBigTech) || (!remoteOnly && !onlyBigTech)) { 
             const remotePromise = fetch(remoteUrl)
             .then((res) => res.json())
             .catch((err => {
@@ -83,15 +96,24 @@ function Explore()  {
 
             Promise.all([remotePromise, bigTechPromise])
             .then(([remoteData, bigTechData]) => {
-                const allListingData = remoteData.concat(bigTechData);
-                setJobListings(allListingData);
+
+                const allListingData : JobDataType[]  = remoteData.concat(bigTechData);                
+                const internships : JobDataType[] = allListingData.filter(job => job.internship)
+
+                if(jobType === 'internship') {
+                    setJobListings(internships)
+                } else {
+                    setJobListings(allListingData);
+                }
                 setDataLoading(false);
+            
             }).catch((err) => {
                 console.log('Error in combined remote and big-tech fetch: ', err);
                 setDataLoading(false);
             })
         }
-    }, [onlyBigTech, remoteOnly]);
+    }, [onlyBigTech, remoteOnly, jobType]);
+    
 
     let jobsPerPage : number = 10;
     const totalPages = Math.ceil((searchQuery === "" ? jobListings.length : searchJobListings.length) / jobsPerPage);
@@ -105,6 +127,8 @@ function Explore()  {
 
     const currentJobsDisplay = (searchQuery === "" ? jobListings : searchJobListings).slice(startIndex, endIndex);
 
+
+
     const jobApplyButtonClick = (jobApplyLink : string) => {
         window.open(jobApplyLink);
     };
@@ -117,6 +141,7 @@ function Explore()  {
         setOnlyBigTech(event.target.checked);
     }
 
+
     const handleJobTypeChange = (value: string | string[]) => {
         if (typeof value === 'string') {
             setJobType(value);
@@ -124,6 +149,7 @@ function Explore()  {
             setJobType(value[0]);
         }
     };
+
 
     const handleSearch = (event : React.ChangeEvent<HTMLInputElement>) => {
         setDataLoading(true)
@@ -225,7 +251,8 @@ function Explore()  {
                                 </Grid>
                               </Grid.Container>
                             ) : (
-                                currentJobsDisplay.map((job, index) => (
+                                currentJobsDisplay
+                                .map((job, index) => (
                                     <div className='openings-table-row' key={index}>
                                         <div className='table-row-left'>
                                             <div className='table-row-left-primary'> 

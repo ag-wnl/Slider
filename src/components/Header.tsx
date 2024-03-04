@@ -46,6 +46,12 @@ function Header() {
             {isMenuOpen && (
                         <div className="mobile-navbar-dropdown">
                             <div>
+                            <Link to="/explore">
+                                <Text h4 b type="success">Explore</Text>
+                            </Link>
+                            </div>
+                            
+                            <div>
                             <Link to="/about">
                                 <Text h4 b type="success">About</Text>
                             </Link>
